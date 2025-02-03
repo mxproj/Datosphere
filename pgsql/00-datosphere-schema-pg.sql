@@ -27,6 +27,7 @@ CREATE TABLE members (
 CREATE TABLE members_info (
   iso_lang_locale     VARCHAR(8),
   member_id           BIGINT,
+  username            VARCHAR(64),
   nickname            VARCHAR(64),
   first_name          VARCHAR(64),
   middle_names        VARCHAR(64),
@@ -664,9 +665,25 @@ CREATE TABLE genders (
 );
 
 CREATE TABLE gender_translations (
-  id                INT  PRIMARY KEY,
-  name              VARCHAR(32)
+  id                INT,
+  iso_lang_locale   VARCHAR(8),
+  name              VARCHAR(32),
+  PRIMARY KEY(id, iso_lang_locale)
 );
+-- CREATE INDEX idx____ ON category_tree ();
+
+
+CREATE TABLE gender_aliases (
+  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  gender_id         INT,
+  iso_lang_locale   VARCHAR(8),
+  alias             VARCHAR(32),
+  slang             BOOLEAN,
+  vulger            BOOLEAN,
+  derogatory        BOOLEAN
+);
+-- CREATE INDEX idx____ ON category_tree ();
+
 
 
 CREATE TABLE category_tree (
