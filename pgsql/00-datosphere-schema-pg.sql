@@ -17,6 +17,10 @@ CREATE TABLE registrations (
 CREATE TABLE members (
   id                    BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   email                 VARCHAR(128)  NOT NULL  UNIQUE,
+  preferred_locale      VARCHAR(8),
+  home_city             BIGINT,  -- expedia EPS geo-tree node id
+  current_location      VARCHAR(64),  -- expedia EPS geo-tree node id, or other text
+  sauciness             SMALLINT,  -- do not show this to the member. Just use it to elevate the level of sexuality in the questions asked to the member to gather data.
   active                BOOLEAN,
   hide_from_search      BOOLEAN,  -- may be only for pro?
   registration_time     TIMESTAMP
@@ -41,6 +45,7 @@ CREATE TABLE members_info (
 CREATE TABLE member_attributes_template (
   gender              INT,
   bio_sex             SMALLINT,  -- 0: F, 1: M, 2: Hermaphrodite
+  sex_change_op       BOOLEAN,   -- has the member gone through a gender transition operation?
   ethnicities         TEXT,      -- comma separated ints
   dob                 DATE,
   height_cm           SMALLINT,
@@ -59,26 +64,27 @@ CREATE TABLE member_attributes_template (
   piercings           TEXT, -- comma separated ints
   body_attributes     TEXT, -- comma separated ints
   personal_attributes TEXT, -- comma separated ints
-  personal_attributes_private TEXT, -- comma separated ints. Add a feature for premium members to send this to matches
-  popularity                  DECIMAL(5,2),
-  preferred_locale            VARCHAR(8),
-  home_city                   BIGINT,  -- expedia EPS geo-tree node id
-  current_location            VARCHAR(64),  -- expedia EPS geo-tree node id, or other text
-  smoker                      BOOLEAN,
-  drinker                     BOOLEAN,
-  recreational_uppers         BOOLEAN,
-  recreational_downers        BOOLEAN
+  sexual_orientations           TEXT, -- comma separated ints
+  smoker                        BOOLEAN,
+  drinker                       BOOLEAN,
+  recreational_uppers           BOOLEAN,
+  recreational_downers          BOOLEAN,
+  popularity                    DECIMAL(5,2)
 );
 
 CREATE TABLE member_attributes (
   LIKE  member_attributes_template  INCLUDING ALL,
-  member_id    BIGINT  PRIMARY KEY
+  member_id    BIGINT  PRIMARY KEY,
+  additional_genders  TEXT,      -- comma separated ints
+  personal_attributes_private   TEXT, -- comma separated ints. Add a feature for premium members to send this to matches
+  sexual_orientations_private   TEXT -- comma separated ints
 );
 
 CREATE TABLE observed_attributes (
   LIKE  member_attributes_template  INCLUDING ALL,
-  subject_id    BIGINT,
-  observer_id   BIGINT,
+  subject_id        BIGINT,
+  observer_id       BIGINT,
+  observed_date     DATE,
   PRIMARY KEY(subject_id, observer_id)
 );
 
@@ -333,7 +339,7 @@ CREATE INDEX idx__reported_members__resolution_time ON reported_members (resolut
 
 
 
-
+-- what tv shows does the member like etc. movies? porn?
 
 
 
@@ -656,18 +662,43 @@ CREATE INDEX idx__media__slug ON media (slug);
 -- =====================
 
 
+-- Genders
+
+
+CREATE TABLE gender_types (
+  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  name              VARCHAR(32),
+  description       VARCHAR(255),
+  also_a_gender     INT,   --  gender_id, if this gender-type is also considered a gender.
+  aliases           varchar(255)  -- comma separated strings
+);
+
+
+-- use this to group them together to aid in searching and matching
+CREATE TABLE gender_groups (
+  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  name              VARCHAR(32),
+  description       VARCHAR(255),
+  typical_bio_sex   INT -- 0: F, 1: M, 2: Hermaphrodite
+);
 
 
 CREATE TABLE genders (
   id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   name              VARCHAR(32),
-  typical_bio_sex   INT -- 0: F, 1: M, 2: Hermaphrodite
+  description       VARCHAR(255),
+  typical_bio_sex   INT, -- 0: F, 1: M, 2: Hermaphrodite.  Null if the gender does not infer sex. Rank these null ones lowest.
+  gender_type       INT,
+  gender_group      INT,
+  usage_popularity  INT
 );
+
 
 CREATE TABLE gender_translations (
   id                INT,
   iso_lang_locale   VARCHAR(8),
   name              VARCHAR(32),
+  description       VARCHAR(255),
   PRIMARY KEY(id, iso_lang_locale)
 );
 -- CREATE INDEX idx____ ON category_tree ();
@@ -678,11 +709,22 @@ CREATE TABLE gender_aliases (
   gender_id         INT,
   iso_lang_locale   VARCHAR(8),
   alias             VARCHAR(32),
+  description       VARCHAR(255),
   slang             BOOLEAN,
   vulger            BOOLEAN,
   derogatory        BOOLEAN
 );
 -- CREATE INDEX idx____ ON category_tree ();
+
+
+
+
+
+
+-- =====================
+
+
+-- taxonomy
 
 
 
