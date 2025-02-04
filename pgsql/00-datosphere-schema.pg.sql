@@ -77,7 +77,8 @@ CREATE TABLE member_attributes (
   member_id    BIGINT  PRIMARY KEY,
   additional_genders  TEXT,      -- comma separated ints
   personal_attributes_private   TEXT, -- comma separated ints. Add a feature for premium members to send this to matches
-  sexual_orientations_private   TEXT -- comma separated ints
+  relationship_orientations     TEXT, -- comma separated ints
+  sexual_orientations_private   TEXT  -- comma separated ints
 );
 
 CREATE TABLE observed_attributes (
@@ -666,7 +667,7 @@ CREATE INDEX idx__media__slug ON media (slug);
 
 
 CREATE TABLE gender_types (
-  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  id                SMALLINT PRIMARY KEY,
   name              VARCHAR(64),
   description       TEXT,
   also_a_gender     INT,   --  gender_id, if this gender-type is also considered a gender.
@@ -674,11 +675,11 @@ CREATE TABLE gender_types (
 );
 
 
--- use this to group them together to aid in searching and matching
 CREATE TABLE gender_groups (
   id                SMALLINT PRIMARY KEY,
   name              VARCHAR(64),
   description       TEXT,
+  gender_type       SMALLINT,
   typical_bio_sex   SMALLINT, -- 1: F, 2: M, 3: Hermaphrodite
   desired_sex       SMALLINT -- 1: F, 2: M, 3: Hermaphrodite
 );
@@ -688,9 +689,8 @@ CREATE TABLE genders (
   id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   name              VARCHAR(64),
   description       TEXT,
-  typical_bio_sex   INT, -- 1: F, 2: M, 3: Hermaphrodite.  Null if the gender does not infer sex. Rank these null ones lowest.
-  gender_type       INT,
-  gender_group      INT,
+  gender_group      INT,  -- NULL, if doesn't fit to a group
+  gender_type       INT,  -- NULL, if doesn't fit to a type
   usage_popularity  INT
 );
 
@@ -719,6 +719,8 @@ CREATE TABLE gender_aliases (
 
 
 
+-- Allow them to add custom genders
+
 
 
 
@@ -726,28 +728,95 @@ CREATE TABLE gender_aliases (
 -- =====================
 
 
--- Sexuality / Sexual Orientations
+-- Attraction - Sexuality / Sexual Orientations
 
 
-CREATE TABLE sexual_orientation_groups (
-  id                    SMALLINT  PRIMARY KEY,
-  name                  VARCHAR(64),
-  description           TEXT,
-  prefers_appearance    SMALLINT,  -- 1: F, 2: M, 3: Both
-  prefers_genitalia     SMALLINT  -- 1: F, 2: M, 3: Both
+
+
+CREATE TABLE attraction_orientation_groups (
+  id                        SMALLINT  PRIMARY KEY,
+  name                      VARCHAR(64),
+  description               TEXT,
+  traditional_orientation   SMALLINT,  --  0: Asexual,  1: Heterosexual,  2: Homosexual,  3: Bisexual  --  -1: N/A
+  strict                    BOOLEAN,   --  Only conforms to the traditional orientation
+  prefers_appearance        SMALLINT,  --  0: cannot-infer, 1: Own-gender, 2: Opposite-Gender, 3: Both
+  prefers_genitalia         SMALLINT   --  0: cannot-infer, 1: Own-sex, 2: Opposite-sex, 3: Both
 );
 
 
-CREATE TABLE sexual_orientations (
+
+CREATE TABLE attraction_to_partnergender_groups (
+  id                        SMALLINT  PRIMARY KEY,
+  name                      VARCHAR(64),
+  description               TEXT,
+  prefers_appearance        SMALLINT,  --  0: cannot-infer, 1: F, 2: M, 3: Both
+  prefers_genitalia         SMALLINT   --  0: cannot-infer, 1: F, 2: M, 3: Both
+);
+
+
+CREATE TABLE attraction_sexuophilia_groups (
+  id                        SMALLINT  PRIMARY KEY,
+  name                      VARCHAR(64),
+  description               TEXT,
+  kink_level                SMALLINT  --  0 - 10.  0 means, it can be presented to even new members. 10 means, may god help you :)
+);
+
+
+CREATE TABLE attraction_orientations (
   id                    INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   name                  VARCHAR(64),
   description           TEXT,
   prefers_appearance    INT,  --  -1: N/A, 0: None, 1: F, 2: M, 3: Both
   prefers_genitalia     INT,  --  -1: N/A, 0: None, 1: F, 2: M, 3: Both
-  sexual_orientation_group_id  SMALLINT,
-  usage_popularity      INT
+  attraction_orientation_group          SMALLINT,
+  attraction_to_partnergender_groups    SMALLINT,
+  attraction_sexuophilia_group          SMALLINT,
+  gender_type           SMALLINT,
+  gender_group          SMALLINT,
+  aliases               TEXT,  -- comma separated strings
+  usage_popularity      INT  DEFAULT -1
 );
 
+
+CREATE TABLE attraction_orientations_l2 (
+  id                    INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  name                  VARCHAR(64),
+  description           TEXT,
+  blah                  SMALLINT
+);
+
+
+-- e.g. Orally Bi etc.
+CREATE TABLE attraction_orientations_sexual_prefs (
+  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  name              VARCHAR(64),
+  description       TEXT,
+  attraction_orientation_id     INT,
+);
+
+
+
+
+
+-- =====================
+
+
+-- Kinks / Paraphilias
+
+
+
+
+CREATE TABLE kink_groups (
+  id                    SMALLINT PRIMARY KEY,
+  name                  VARCHAR(64),
+  description           TEXT,
+  kink_level            SMALLINT,  --  0 - 10.  0 means, it can be presented to even new members. 10 means, it is only for the most kink-elevated members.
+  people_related        BOOLEAN,
+  body_related          BOOLEAN,
+  sensation_related     BOOLEAN,
+  animal_related        BOOLEAN,
+  object_related        BOOLEAN,
+);
 
 
 
