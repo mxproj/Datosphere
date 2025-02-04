@@ -24,8 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__ext__", "__ext__", "{8E17
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{4A7AFAF7-6A2D-4D66-B0E8-321927328B14}"
 	ProjectSection(SolutionItems) = preProject
-		..\pgsql\00-datosphere-schema-pg.sql = ..\pgsql\00-datosphere-schema-pg.sql
-		..\pgsql\01-datosphere-static-data-pg.sql = ..\pgsql\01-datosphere-static-data-pg.sql
+		..\pgsql\00-datosphere-schema.pg.sql = ..\pgsql\00-datosphere-schema.pg.sql
+		..\pgsql\01-datosphere-static-data-.pg.sql = ..\pgsql\01-datosphere-static-data-.pg.sql
+		..\pgsql\01-datosphere-static-data-gender-sexuality.pg.sql = ..\pgsql\01-datosphere-static-data-gender-sexuality.pg.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ext.Shared", "src\libes.ext\Ext.Shared\Ext.Shared.csproj", "{01D3FB74-E435-4108-BAF2-8EBB1D238AFE}"

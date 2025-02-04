@@ -44,7 +44,7 @@ CREATE TABLE members_info (
 
 CREATE TABLE member_attributes_template (
   gender              INT,
-  bio_sex             SMALLINT,  -- 0: F, 1: M, 2: Hermaphrodite
+  bio_sex             SMALLINT,  -- 1: F, 2: M, 3: Hermaphrodite
   sex_change_op       BOOLEAN,   -- has the member gone through a gender transition operation?
   ethnicities         TEXT,      -- comma separated ints
   dob                 DATE,
@@ -667,8 +667,8 @@ CREATE INDEX idx__media__slug ON media (slug);
 
 CREATE TABLE gender_types (
   id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
-  name              VARCHAR(32),
-  description       VARCHAR(255),
+  name              VARCHAR(64),
+  description       TEXT,
   also_a_gender     INT,   --  gender_id, if this gender-type is also considered a gender.
   aliases           varchar(255)  -- comma separated strings
 );
@@ -676,18 +676,19 @@ CREATE TABLE gender_types (
 
 -- use this to group them together to aid in searching and matching
 CREATE TABLE gender_groups (
-  id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
-  name              VARCHAR(32),
-  description       VARCHAR(255),
-  typical_bio_sex   INT -- 0: F, 1: M, 2: Hermaphrodite
+  id                SMALLINT PRIMARY KEY,
+  name              VARCHAR(64),
+  description       TEXT,
+  typical_bio_sex   SMALLINT, -- 1: F, 2: M, 3: Hermaphrodite
+  desired_sex       SMALLINT -- 1: F, 2: M, 3: Hermaphrodite
 );
 
 
 CREATE TABLE genders (
   id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
-  name              VARCHAR(32),
-  description       VARCHAR(255),
-  typical_bio_sex   INT, -- 0: F, 1: M, 2: Hermaphrodite.  Null if the gender does not infer sex. Rank these null ones lowest.
+  name              VARCHAR(64),
+  description       TEXT,
+  typical_bio_sex   INT, -- 1: F, 2: M, 3: Hermaphrodite.  Null if the gender does not infer sex. Rank these null ones lowest.
   gender_type       INT,
   gender_group      INT,
   usage_popularity  INT
@@ -697,8 +698,8 @@ CREATE TABLE genders (
 CREATE TABLE gender_translations (
   id                INT,
   iso_lang_locale   VARCHAR(8),
-  name              VARCHAR(32),
-  description       VARCHAR(255),
+  name              VARCHAR(64),
+  description       TEXT,
   PRIMARY KEY(id, iso_lang_locale)
 );
 -- CREATE INDEX idx____ ON category_tree ();
@@ -708,13 +709,44 @@ CREATE TABLE gender_aliases (
   id                INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   gender_id         INT,
   iso_lang_locale   VARCHAR(8),
-  alias             VARCHAR(32),
-  description       VARCHAR(255),
+  alias             VARCHAR(64),
+  description       TEXT,
   slang             BOOLEAN,
   vulger            BOOLEAN,
   derogatory        BOOLEAN
 );
 -- CREATE INDEX idx____ ON category_tree ();
+
+
+
+
+
+
+
+-- =====================
+
+
+-- Sexuality / Sexual Orientations
+
+
+CREATE TABLE sexual_orientation_groups (
+  id                    SMALLINT  PRIMARY KEY,
+  name                  VARCHAR(64),
+  description           TEXT,
+  prefers_appearance    SMALLINT,  -- 1: F, 2: M, 3: Both
+  prefers_genitalia     SMALLINT  -- 1: F, 2: M, 3: Both
+);
+
+
+CREATE TABLE sexual_orientations (
+  id                    INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  name                  VARCHAR(64),
+  description           TEXT,
+  prefers_appearance    INT,  --  -1: N/A, 0: None, 1: F, 2: M, 3: Both
+  prefers_genitalia     INT,  --  -1: N/A, 0: None, 1: F, 2: M, 3: Both
+  sexual_orientation_group_id  SMALLINT,
+  usage_popularity      INT
+);
 
 
 
