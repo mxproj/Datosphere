@@ -1,4 +1,4 @@
-namespace Datosphere.Infrastructure;
+﻿namespace Datosphere.Infrastructure;
 
 public class Class1
 {

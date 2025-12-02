@@ -1,6 +1,0 @@
-@Datosphere.Dev.Api_HostAddress = http://localhost:5306
-
-GET {{Datosphere.Dev.Api_HostAddress}}/test1/
-Accept: application/json
-
-###
