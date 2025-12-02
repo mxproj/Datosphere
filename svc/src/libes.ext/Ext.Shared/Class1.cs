@@ -1,4 +1,4 @@
-﻿namespace Ext.Shared;
+namespace Ext.Shared;
 
 public class Class1
 {

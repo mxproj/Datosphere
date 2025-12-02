@@ -1,4 +1,4 @@
-﻿namespace Datosphere.Core;
+namespace Datosphere.Core;
 
 public class Class1
 {

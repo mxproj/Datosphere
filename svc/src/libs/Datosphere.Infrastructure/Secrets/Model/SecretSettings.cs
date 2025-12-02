@@ -1,4 +1,4 @@
-﻿namespace Datosphere.Infrastructure.Secrets.Model;
+namespace Datosphere.Infrastructure.Secrets.Model;
 
 
 public record SecretSettings
