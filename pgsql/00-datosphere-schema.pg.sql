@@ -1,8 +1,10 @@
 
+-- #logins, #authentication
 CREATE TABLE credentials (
-  email           VARCHAR(128)  NOT NULL  UNIQUE,
+  username        VARCHAR(128)  NOT NULL  UNIQUE,
   password_hash   TEXT  NOT NULL,
-  password_salt   TEXT  NOT NULL
+  password_salt   TEXT  NOT NULL,
+  member_id       BIGINT  NOT NULL  UNIQUE
   -- code model should also have an `attempt_count` field
 );
 

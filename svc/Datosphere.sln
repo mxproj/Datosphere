@@ -20,6 +20,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datosphere.Web.Common", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datosphere.Infrastructure", "src\libs\Datosphere.Infrastructure\Datosphere.Infrastructure.csproj", "{61BDDA6E-6F15-D825-C85D-323B1A1E3637}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datosphere.DataServer.Core", "src\libs\Datosphere.DataServer.Core\Datosphere.DataServer.Core.csproj", "{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datosphere.Protos", "src\libs\Datosphere.Protos\Datosphere.Protos.csproj", "{2CAA360D-A123-43C4-A86D-8D057EBDFF24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datosphere.DataServer.Grpc", "src\execs\Datosphere.DataServer.Grpc\Datosphere.DataServer.Grpc.csproj", "{EDB76F67-ABB2-4773-948C-E6A89F6974C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +52,18 @@ Global
 		{61BDDA6E-6F15-D825-C85D-323B1A1E3637}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61BDDA6E-6F15-D825-C85D-323B1A1E3637}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61BDDA6E-6F15-D825-C85D-323B1A1E3637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CAA360D-A123-43C4-A86D-8D057EBDFF24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CAA360D-A123-43C4-A86D-8D057EBDFF24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CAA360D-A123-43C4-A86D-8D057EBDFF24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CAA360D-A123-43C4-A86D-8D057EBDFF24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB76F67-ABB2-4773-948C-E6A89F6974C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB76F67-ABB2-4773-948C-E6A89F6974C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB76F67-ABB2-4773-948C-E6A89F6974C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB76F67-ABB2-4773-948C-E6A89F6974C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +76,9 @@ Global
 		{772DBC3F-F6E1-6D07-5332-7479DDCF8351} = {E431C0EF-0A07-9D2C-3EA9-2C750D5184D2}
 		{0AF3F4BA-B413-91D7-2BC4-B37468AA022A} = {E431C0EF-0A07-9D2C-3EA9-2C750D5184D2}
 		{61BDDA6E-6F15-D825-C85D-323B1A1E3637} = {E431C0EF-0A07-9D2C-3EA9-2C750D5184D2}
+		{ABF16FF0-204B-40D6-AB10-AE3C64A0CC9A} = {E431C0EF-0A07-9D2C-3EA9-2C750D5184D2}
+		{2CAA360D-A123-43C4-A86D-8D057EBDFF24} = {E431C0EF-0A07-9D2C-3EA9-2C750D5184D2}
+		{EDB76F67-ABB2-4773-948C-E6A89F6974C7} = {75B2686D-86F4-889B-D4BD-8ADDD98120D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5E7A1A46-EBD2-43C8-BEF4-5D4866F320CC}
