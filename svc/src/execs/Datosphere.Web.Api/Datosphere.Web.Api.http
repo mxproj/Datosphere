@@ -1,6 +1,6 @@
-@Datosphere.Web.Api_HostAddress = http://localhost:5003
+@Datosphere_Web_Api_HostAddress = http://localhost:5003
 
-GET {{Datosphere.Web.Api_HostAddress}}/weatherforecast/
+GET {{Datosphere_Web_Api_HostAddress}}/meta/version/full
 Accept: application/json
 
 ###

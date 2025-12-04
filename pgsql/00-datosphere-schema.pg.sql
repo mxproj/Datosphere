@@ -1,10 +1,13 @@
 
 -- #logins, #authentication
+-- get username from members table.
+--    
+-- we may mnaually add members, in which case they won't have credentials
+--
 CREATE TABLE credentials (
-  username        VARCHAR(128)  NOT NULL  UNIQUE,
+  member_id       BIGINT  NOT NULL  UNIQUE,
   password_hash   TEXT  NOT NULL,
-  password_salt   TEXT  NOT NULL,
-  member_id       BIGINT  NOT NULL  UNIQUE
+  password_salt   TEXT  NOT NULL
   -- code model should also have an `attempt_count` field
 );
 
@@ -18,6 +21,7 @@ CREATE TABLE registrations (
 
 CREATE TABLE members (
   id                    BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  username              VARCHAR(64)  NOT NULL  UNIQUE,
   email                 VARCHAR(128)  NOT NULL  UNIQUE,
   preferred_locale      VARCHAR(8),
   home_city             BIGINT,  -- expedia EPS geo-tree node id
@@ -33,7 +37,6 @@ CREATE TABLE members (
 CREATE TABLE members_info (
   iso_lang_locale     VARCHAR(8),
   member_id           BIGINT,
-  username            VARCHAR(64),
   nickname            VARCHAR(64),
   first_name          VARCHAR(64),
   middle_names        VARCHAR(64),
@@ -178,6 +181,7 @@ CREATE INDEX idx__member_photos__member_id ON member_photos (member_id);
 CREATE INDEX idx__member_photos__media_id ON member_photos (media_id);
 
 
+-- members identified in photos
 CREATE TABLE member_photo_people (
   id          BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   photo_id    BIGINT,
