@@ -1,3 +1,5 @@
+using Datosphere.Abstractions;
+using Datosphere.Domain.Models.Member;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -9,19 +11,23 @@ namespace Datosphere.Web.Api.Controllers;
 public class ProfileController : ControllerBase
 {
     private readonly ILogger<ProfileController> _logger;
+    private readonly IMemberProfileRepository _memberProfileRepository;
 
 
-    public ProfileController(ILogger<ProfileController> logger)
+    public ProfileController(ILogger<ProfileController> logger, IMemberProfileRepository memberProfileRepository)
     {
         _logger = logger;
+        _memberProfileRepository = memberProfileRepository;
     }
 
 
     [HttpGet]
     [Route("{id}")]
-    public string GetProfile(string id)
+    public async Task<MemberProfile?> GetProfile(string id)
     {
-        return "Profile " + id;
+        _logger.LogDebug("Getting Profile");
+        var profile = await _memberProfileRepository.GetMemberProfile(id);
+        return profile;
     }
 
 
@@ -29,6 +35,6 @@ public class ProfileController : ControllerBase
     [Route("test")]
     public string Test()
     {
-        return "Hello World";
+        return "Test";
     }
 }

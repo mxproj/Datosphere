@@ -2,7 +2,7 @@
 -- #logins, #authentication
 -- get username from members table.
 --    
--- we may mnaually add members, in which case they won't have credentials
+-- we may manually add members, in which case they won't have credentials
 --
 CREATE TABLE credentials (
   member_id       BIGINT  NOT NULL  UNIQUE,
@@ -34,8 +34,8 @@ CREATE TABLE members (
 
 
 
-CREATE TABLE members_info (
-  iso_lang_locale     VARCHAR(8),
+CREATE TABLE member_info (
+  iso_lang_locale     VARCHAR(8),  -- e.g. en_GB, fr_FR, de_DE, es_ES, it_IT, ja_JP, zh_CN, zh_TW
   member_id           BIGINT,
   nickname            VARCHAR(64),
   first_name          VARCHAR(64),
@@ -56,19 +56,21 @@ CREATE TABLE member_attributes_template (
   height_cm           SMALLINT,
   weight_kg           SMALLINT,
   build               SMALLINT,  --  0: skinny, 1: slim, 2: average, 3: athletic, 4: muscular, 5: super-musucular, 6: curvy, 7: chubby, 8: fat, 6: obese
+  belly               SMALLINT,  --  same options as 'build'
+  legs                SMALLINT,  --  same options as 'build'
   hair_color          SMALLINT,  --  0: black, 1: brown, 2: blonde, 3: red, 4: gray, 5: white, 6: blue, 7: green, 8: purple, 9: pink, 10: other
-  hair_length         SMALLINT,  --  0: bald, 1: very short, 2: short, 3: male-cut,
-                                 --  4: neck-length, 5: shoulder-length, 6: upper-back-length, 7: mid-back-length, 8: lower-back-length,
-                                 --  9: waist-length, 10: ass-length, 11: knee-length, 12: floor-length
-  grooming_legs       SMALLINT,  --  0: lasered, 1: waxed, 2: shaved, 3: natural-barely-hairy, 4: natural-hairy  ---  re-order. most to least
+  hair_length         SMALLINT,  --  0: bald, 1: sparse-fuzz, 2: fuzz, 3: very short, 4: short, 5: male-cut,
+                                 --  6: neck-length, 7: shoulder-length, 8: upper-back-length, 9: mid-back-length, 10: lower-back-length
+                                 --  11: waist-length, 12: ass-length, 13: knee-length, 14: floor-length, 15: rapunzel
+  grooming_legs       SMALLINT,  --  See Grooming.cs
   grooming_bikini     SMALLINT,  --  0: lasered, 1: waxed, 2: shaved, 3: natural-barely-hairy, 4: natural-hairy-but-tidy-within-bikini-line, 4: natural-hairy-but-tidy, 4: natural-hairy-curly-bush, 5: brazilian, 6: runway-strip, 7: tidy-bikini-line, 8: designer
-  grooming_fullbody   SMALLINT,  --  0: lasered, 1: waxed, 2: shaved, 3: natural-barely-hairy, 4: natural-hairy
-  grooming_anus       SMALLINT,  --  0: lasered, 1: waxed, 2: shaved, 3: natural-barely-hairy, 4: natural-hairy
-  anal_bleached       BOOLEAN,
+  grooming_fullbody   SMALLINT,  --  See Grooming.cs
+  grooming_anus       SMALLINT,  --  See Grooming.cs
+  anus_bleached       BOOLEAN,
   tattooes            TEXT, -- comma separated ints
   piercings           TEXT, -- comma separated ints
-  body_attributes     TEXT, -- comma separated ints
-  personal_attributes TEXT, -- comma separated ints
+  extra_body_attributes         TEXT, -- comma separated ints
+  personal_attributes           TEXT, -- comma separated ints
   sexual_orientations           TEXT, -- comma separated ints
   smoker                        BOOLEAN,
   drinker                       BOOLEAN,
@@ -86,7 +88,8 @@ CREATE TABLE member_attributes (
   sexual_orientations_private   TEXT  -- comma separated ints
 );
 
-CREATE TABLE observed_attributes (
+-- as observed by other members
+CREATE TABLE member_attributes_observed (
   LIKE  member_attributes_template  INCLUDING ALL,
   subject_id        BIGINT,
   observer_id       BIGINT,
@@ -113,7 +116,8 @@ CREATE TABLE members_m_attributes (
   cock_girth_cm       SMALLINT,
   enlarged            BOOLEAN,
   penile_implants     TEXT,     --  comma separated ints. 0: none, 1: silicone, 2: fat/collagen, 3: dermal, 4: PMMA, 5: akuza Beads, 6: other
-  ejaculation         SMALLINT, --  0: cannot, 1: can, 2: heavy, 3: would make Peter North jealous
+  ejaculation_amount  SMALLINT, --  0: cannot, 1: little-bit, 2: fair-bit, 3: heavy, 10: would make Peter North jealous
+  ejaculation_type    SMALLINT, --  0: none,  1: clear,  2: cloudy,  3: milky,  4: thick-creamy,  99: other
   multishooter        BOOLEAN
 );
 
@@ -126,6 +130,46 @@ CREATE TABLE members_t_attributes (
   breast_removed      BOOLEAN,
   hormones            BOOLEAN
 );
+
+
+
+CREATE TABLE members_tattooes (
+  id              BIGINT  PRIMARY KEY,
+  member_id       BIGINT,
+  tattoo_method   SMALLINT,
+  art             SMALLINT
+  tags            TEXT,       -- CSV of ints referencing string tags.
+  location        SMALLINT
+);
+CREATE INDEX idx__members_tattooes__member_id ON member_socials (member_id);
+-- CREATE INDEX idx__members_tattooes__location ON member_socials (location);
+
+
+CREATE TABLE members_piercings (
+    id              BIGINT PRIMARY KEY,
+    member_id       BIGINT,
+    jewelry_type    SMALLINT,   -- type of jewelry used, e.g., ring, barbell
+    tags            TEXT,       -- CSV of ints referencing string tags
+    location        SMALLINT    -- use BodyArtLocation enum for piercing spots
+);
+CREATE INDEX idx__members_piercings__member_id ON member_socials (member_id);
+
+
+CREATE TABLE members_body_mods (
+    id            BIGINT PRIMARY KEY,
+    member_id     BIGINT NOT NULL,
+    mod_method    SMALLINT,    -- how the modification was done (e.g., branding, scarification, subdermal implant)
+    mod_type      SMALLINT,    -- type of modification (e.g., implant, cut pattern, raised scar)
+    location      SMALLINT,    -- BodyArtLocation or specialized enum for body mod spots
+    tags          TEXT         -- CSV of ints referencing string tags (optional for extra info)
+);
+CREATE INDEX idx__members_body_mods__member_id ON member_socials (member_id);
+
+
+
+--
+-- Contact and links
+--
 
 
 CREATE TABLE members_contact (
