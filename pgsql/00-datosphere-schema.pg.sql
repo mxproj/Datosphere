@@ -23,6 +23,7 @@ CREATE TABLE members (
   id                    BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
   username              VARCHAR(64)  NOT NULL  UNIQUE,
   email                 VARCHAR(128)  NOT NULL  UNIQUE,
+  profile_photo_id      BIGINT,
   preferred_locale      VARCHAR(8),
   home_city             BIGINT,  -- expedia EPS geo-tree node id
   current_location      VARCHAR(64),  -- expedia EPS geo-tree node id, or other text
