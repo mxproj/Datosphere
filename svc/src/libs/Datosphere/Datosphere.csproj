@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MKX.Core.Exec.Web" Version="1" />
+    <PackageReference Include="MKX.Core.Exec.Web" Version="1.*" />
   </ItemGroup>
 
 </Project>
