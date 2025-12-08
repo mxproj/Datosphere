@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 namespace Datosphere.Services;
 
 
-public class MemberProfileRepository : IMemberProfileRepository
+public class MemberProfileService : IMemberProfileRepository
 {
-    private readonly ILogger<MemberProfileRepository> _logger;
+    private readonly ILogger<MemberProfileService> _logger;
 
 
-    public MemberProfileRepository(ILogger<MemberProfileRepository> logger)
+    public MemberProfileService(ILogger<MemberProfileService> logger)
     {
         _logger = logger;
     }
@@ -114,7 +114,9 @@ public class MemberProfileRepository : IMemberProfileRepository
             BasicInfo = new Dictionary<string, MemberBasicInfo>
             {
                 { "en_GB", info }
-            }
+            },
+            MainImageID = "",
+            Images = []
         };
 
         return Task.FromResult(profile);
