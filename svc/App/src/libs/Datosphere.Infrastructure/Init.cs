@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Datosphere.Infrastructure;
 
 
-public class Init
+public static class Init
 {
     public static void ConfigureBuilder(WebApplicationBuilder builder)
     {

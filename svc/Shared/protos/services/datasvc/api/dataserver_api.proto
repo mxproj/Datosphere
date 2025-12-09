@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package datosphere.grpc.data.api;
+
+
+service DataServer {
+  rpc GetMemberProfile (MemberProfileRequest)  returns (MemberProfileResponse);
+  rpc GetMemberSnippets (MemberSnippetsRequest)  returns (MemberSnippetsResponse);
+}
+
+
+
+/**
+ * GetMemberProfile
+ */
+
+message MemberProfileRequest {}
+
+message MemberProfileResponse {}
+
+
+
+/**
+ * GetMemberProfile
+ */
+
+message MemberSnippetsRequest {}
+
+message MemberSnippetsResponse {}
+
