@@ -3,8 +3,11 @@ syntax = "proto3";
 package datosphere.grpc.data.api;
 
 
+import "common/uuid.proto";
+
+
 service DataServer {
-  rpc GetMemberProfile (MemberProfileRequest)  returns (MemberProfileResponse);
+  rpc GetMemberProfileByUuid (MemberProfileUuidRequest)  returns (MemberProfileResponse);
   rpc GetMemberSnippets (MemberSnippetsRequest)  returns (MemberSnippetsResponse);
 }
 
@@ -14,7 +17,9 @@ service DataServer {
  * GetMemberProfile
  */
 
-message MemberProfileRequest {}
+message MemberProfileUuidRequest {
+  datosphere.common.Uuid MemberProfileUuid = 1;
+}
 
 message MemberProfileResponse {}
 

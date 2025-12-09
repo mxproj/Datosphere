@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package datosphere.common;
+
+//import "google/protobuf/any.proto";
+
+
+// Example: 12345.678 -> { units = 12345, nanos = 678000000, scale = 3 }
+message DecimalValue {
+
+  // Whole units part of the amount
+  int64 units = 1;
+
+  // Nano units of the amount (10^-9)
+  // Must be same sign as units
+  // The value must be between -999,999,999 and +999,999,999 inclusive.
+  // If `units` is positive, `nanos` must be positive or zero.
+  // If `units` is zero, `nanos` can be positive, zero, or negative.
+  // If `units` is negative, `nanos` must be negative or zero.
+  // For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
+  int32 nanos = 2;
+
+  // The scale of the amount. Must be >= 0.
+  int32 scale = 3;
+}

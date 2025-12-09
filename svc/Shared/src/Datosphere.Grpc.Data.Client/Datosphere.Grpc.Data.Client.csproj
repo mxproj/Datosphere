@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf ProtoRoot="../../protos" Include="../../protos/common/**/*.proto" GrpcServices="None" />
     <!--
     <Protobuf ProtoRoot="../../protos" Include="../../protos/services/datasvc/dto/**/*.proto" GrpcServices="None" />
     -->
