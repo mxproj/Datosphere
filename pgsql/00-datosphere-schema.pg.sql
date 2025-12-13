@@ -1,27 +1,45 @@
 
+
+-- products are sites
+CREATE TABLE products (
+  id             BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
+  uuid           UUID  NOT NULL  UNIQUE,
+  domain         VARCHAR(128)  NOT NULL  UNIQUE,
+  name           VARCHAR(128)  NOT NULL  UNIQUE,
+  description    TEXT  NULL,
+)
+
+
+
 -- #logins, #authentication
 -- get username from members table.
 --    
 -- we may manually add members, in which case they won't have credentials
 --
+-- This is also a product-member mapping
+--
 CREATE TABLE credentials (
   member_id       BIGINT  NOT NULL  UNIQUE,
-  password_hash   TEXT  NOT NULL,
-  password_salt   TEXT  NOT NULL
+  password_hash   VARCHAR(255)  NOT NULL,
+  password_salt   VARCHAR(255)  NOT NULL,
+  product_id      BIGINT  NOT NULL
   -- code model should also have an `attempt_count` field
 );
+CREATE INDEX idx__credentials__product_id ON credentials (product_id);
 
 
 CREATE TABLE registrations (
-  email             VARCHAR(128)  NOT NULL  UNIQUE,
-  confirmation_code TEXT NOT NULL,
-  generation_time   TIMESTAMP
+  product_id          BIGINT  NOT NULL,
+  email               VARCHAR(128)  NOT NULL  UNIQUE,
+  confirmation_code   TEXT NOT NULL,
+  generation_time     TIMESTAMP
 );
+CREATE INDEX idx__registrations__product_id ON registrations (product_id);
 
 
 CREATE TABLE members (
   id                    BIGINT  PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,
-  username              VARCHAR(64)  NOT NULL  UNIQUE,
+  username              VARCHAR(64)  NOT NULL  UNIQUE,   -- must be url-safe
   email                 VARCHAR(128)  NOT NULL  UNIQUE,
   profile_photo_id      BIGINT,
   preferred_locale      VARCHAR(8),
